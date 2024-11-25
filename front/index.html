@@ -79,13 +79,19 @@
         position: relative;
         top: -25px;
     }
+
+    .b {
+        position: absolute;
+    }
 </style>
 <script>
     let chord = document.querySelector("#chord")
     let markup = document.querySelector(".main")
     let akkords = {};
     let saveAJAX = () => {
-        console.log(akkords);
+        if (!Object.keys(akkords).length || !chord.value.trim()) {
+            return;
+        };
         axios.post(`/save`, {
             akkords: akkords, text: chord.value
         }).then((c) => {
@@ -110,7 +116,7 @@
             }
             for (let j = 0; j <= t[i]?.length - 1; j++) {
                 tt += `<span onclick="choose(event,${i},${j})" class="word" style="cursor:pointer;"> ${t[i][j]}`
-                tt += akkords[`${i}-${j}`] ? `<span style="left:-${akkords[`${i}-${j}`].w / 2}px" class="a">${akkords[`${i}-${j}`].v}</span>` : ''
+                tt += akkords[`${i}-${j}`] ? `<span style="left:-${akkords[`${i}-${j}`].w / 2}px" class="a"><span class="b">${akkords[`${i}-${j}`].v}</span></span>` : ''
                 tt += `</span>`
             }
             tt += '</div>'

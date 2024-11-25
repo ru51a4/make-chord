@@ -26,7 +26,10 @@ app.post('/save', function (req, res) {
 
 
 app.get('/view', function (req, res) {
-    let id = req.query?.id;
+    let id = req.query.id;
+    if (!id) {
+        return res.send("")
+    }
     if (!kek[id]) {
         return res.send("");
     };
@@ -38,12 +41,15 @@ app.get('/view', function (req, res) {
         let html = '';
         for (let i = 0; i <= t.length - 1; i++) {
             let tt = '<div class="lline">'
-            if (!t[i]?.length) {
+            if (!t[i].length) {
                 html += `<hr>`
             }
-            for (let j = 0; j <= t[i]?.length - 1; j++) {
+            if (!t[i].length) {
+                continue
+            }
+            for (let j = 0; j <= t[i].length - 1; j++) {
                 tt += `<span onclick="choose(event,${i},${j})" class="word" style="cursor:pointer;"> ${t[i][j]}`
-                tt += akkords[`${i}-${j}`] ? `<span style="left:-${akkords[`${i}-${j}`].w / 2}px" class="a">${akkords[`${i}-${j}`].v}</span>` : ''
+                tt += akkords[`${i}-${j}`] ? `<span style="left:-${akkords[`${i}-${j}`].w / 2}px" class="a"><span class="b">${akkords[`${i}-${j}`].v}</span></span>` : ''
                 tt += `</span>`
             }
             tt += '</div>'
