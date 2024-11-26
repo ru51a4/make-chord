@@ -88,6 +88,7 @@
     let chord = document.querySelector("#chord")
     let markup = document.querySelector(".main")
     let akkords = {};
+    let _text = {};
     let saveAJAX = () => {
         if (!Object.keys(akkords).length || !chord.value.trim()) {
             return;
@@ -104,10 +105,65 @@
         chord.dispatchEvent(new Event('select'));
 
     }
+    let reset = (i) => {
+        let t = _text
+        for (let a = 0; a <= t[i].length - 1; a++) {
+            akkords[`${i}-${a}`] = null;
+        }
+        chord.value = t.map((c, j) => {
+            return i == j ? c.filter((c) => c !== '______').join(" ") : c.join(" ")
+        }).join("\n")
+        chord.dispatchEvent(new Event('select'));
+
+    }
+    let copy = (i) => {
+        let ii = i - 1;
+        let t = _text
+        if (!t[ii].length) {
+            ii--;
+        }
+        let counter1 = 0;
+        let r = [];
+
+        let f = (cc) => {
+            let ff = 0;
+            for (let a = 0; a <= t[i].length - 1; a++) {
+                for (let j = 0; j <= t[i][a].length - 1; j++) {
+                    for (let l = 0; l <= t[i][a][j].length - 1; l++) {
+                        ff++
+                        if (ff === cc) {
+                            return a;
+                        }
+                    }
+                }
+            }
+            return t[i].length - 1;
+        }
+        for (let a = 0; a <= t[i].length - 1; a++) {
+            akkords[`${i}-${a}`] = null;
+        }
+        let h = [0]
+        for (let a = 0; a <= t[ii].length - 1; a++) {
+            counter1 += t[ii][a].length
+            if (akkords[`${ii}-${a}`]) {
+                let asd = f(counter1);
+                if (h[h.length - 1] > asd || akkords[`${i}-${asd}`]) {
+                    t[i].push("______");
+                    asd = t[i].length - 1;
+                }
+                h.push(asd)
+                akkords[`${i}-${asd}`] = akkords[`${ii}-${a}`]
+            }
+        }
+        chord.value = t.map((c) => c.join(" ")).join("\n")
+        chord.dispatchEvent(new Event('select'));
+
+    };
     let m = (e) => {
         let t = e.target.value;
         t = t.split("\n")
         t = t.map((c) => c.split(" ").filter((c) => !!c))
+        _text = t;
         let html = '';
         for (let i = 0; i <= t.length - 1; i++) {
             let tt = '<div class="lline">'
@@ -118,6 +174,11 @@
                 tt += `<span onclick="choose(event,${i},${j})" class="word" style="cursor:pointer;"> ${t[i][j]}`
                 tt += akkords[`${i}-${j}`] ? `<span style="left:-${akkords[`${i}-${j}`].w / 2}px" class="a"><span class="b">${akkords[`${i}-${j}`].v}</span></span>` : ''
                 tt += `</span>`
+            }
+            if (t[i]?.length) {
+                tt += i !== 0 ? `<span style="color:blue; cursor:pointer;" onclick="copy(${i})"> copy above </span>` : ''
+                tt += `<span style="color:gray; cursor:pointer;" onclick="reset(${i})"> reset </span>`;
+
             }
             tt += '</div>'
             html += tt
