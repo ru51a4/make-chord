@@ -160,7 +160,7 @@
                 }
                 h.push(asd)
                 akkords[`${i}-${asd}`] = JSON.parse(JSON.stringify(akkords[`${ii}-${a}`]))
-                akkords[`${i}-${asd}`].w = 0;
+                akkords[`${i}-${asd}`].w = 10;
             }
         }
         chord.value = t.map((c) => c.join(" ")).join("\n")
