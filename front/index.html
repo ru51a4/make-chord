@@ -128,18 +128,18 @@
         let f = (cc) => {
             let c1 = t[ii].reduce((acc, a) => {
                 return acc += a.length
-            });
+            }, 0);
             let c2 = t[i].reduce((acc, a) => {
                 return acc += a.length
-            });
-
+            }, 0);
+            cc = Math.floor(cc * (c2 / c1))
             let ff = 0;
             for (let a = 0; a <= t[i].length - 1; a++) {
                 for (let j = 0; j <= t[i][a].length - 1; j++) {
                     for (let l = 0; l <= t[i][a][j].length - 1; l++) {
                         ff++
                         if (ff === cc) {
-                            return (c1 <= c2) ? a : a - 1 <= 0 ? 0 : a - 1
+                            return a;
                         }
                     }
                 }
