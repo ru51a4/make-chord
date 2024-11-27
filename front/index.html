@@ -126,13 +126,20 @@
         let r = [];
 
         let f = (cc) => {
+            let c1 = t[ii].reduce((acc, a) => {
+                return acc += a.length
+            });
+            let c2 = t[i].reduce((acc, a) => {
+                return acc += a.length
+            });
+
             let ff = 0;
             for (let a = 0; a <= t[i].length - 1; a++) {
                 for (let j = 0; j <= t[i][a].length - 1; j++) {
                     for (let l = 0; l <= t[i][a][j].length - 1; l++) {
                         ff++
                         if (ff === cc) {
-                            return a
+                            return (c1 <= c2) ? a : a - 1 <= 0 ? 0 : a - 1
                         }
                     }
                 }
@@ -152,7 +159,8 @@
                     asd = t[i].length - 1;
                 }
                 h.push(asd)
-                akkords[`${i}-${asd}`] = akkords[`${ii}-${a}`]
+                akkords[`${i}-${asd}`] = JSON.parse(JSON.stringify(akkords[`${ii}-${a}`]))
+                akkords[`${i}-${asd}`].w = 0;
             }
         }
         chord.value = t.map((c) => c.join(" ")).join("\n")
