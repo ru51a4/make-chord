@@ -89,6 +89,7 @@
     let markup = document.querySelector(".main")
     let akkords = {};
     let _text = {};
+    let _set_indexes = [];
     let saveAJAX = () => {
         if (!Object.keys(akkords).length || !chord.value.trim()) {
             return;
@@ -101,7 +102,8 @@
     }
     let choose = (e, i, j) => {
         let c = prompt("Enter akkords");
-        akkords[`${i}-${j}`] = { v: c, w: e.target.offsetWidth };
+        akkords[`${i}-${j}`] = { v: c, w: e.target.offsetWidth, set: true };
+        _set_indexes.push(i);
         chord.dispatchEvent(new Event('select'));
 
     }
@@ -113,15 +115,13 @@
         chord.value = t.map((c, j) => {
             return i == j ? c.filter((c) => c !== '______').join(" ") : c.join(" ")
         }).join("\n")
+        _set_indexes = _set_indexes.filter((c) => c !== i);
         chord.dispatchEvent(new Event('select'));
 
     }
     let copy = (i) => {
-        let ii = i - 1;
         let t = _text
-        if (!t[ii].length) {
-            ii--;
-        }
+        let ii = Math.max(..._set_indexes.filter((c) => c < i))
         let counter1 = 0;
         let r = [];
 
